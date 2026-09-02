@@ -38,3 +38,34 @@ export interface NavItem {
   label: string
   icon: LucideIcon
 }
+
+/** 用户角色 */
+export type UserRole = 'admin' | 'user'
+
+/** 用户信息 */
+export interface User {
+  id: string
+  username: string
+  email: string
+  role: UserRole
+}
+
+/** 登录表单数据 */
+export interface LoginFormData {
+  email: string
+  password: string
+  rememberMe: boolean
+}
+
+/** 注册表单数据 */
+export interface RegisterFormData {
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+/** 表单验证错误 */
+export interface FormErrors {
+  [key: string]: string
+}

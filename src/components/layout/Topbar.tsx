@@ -1,10 +1,13 @@
 import { Bell, Menu, Search } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 
 interface TopbarProps {
   onOpenMobileMenu: () => void
 }
 
 export function Topbar({ onOpenMobileMenu }: TopbarProps) {
+  const { user, logout } = useAuth()
+
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b border-white/10 bg-[#0b0d12]/80 px-4 backdrop-blur lg:px-6">
       <button
@@ -35,11 +38,22 @@ export function Topbar({ onOpenMobileMenu }: TopbarProps) {
         <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
       </button>
 
+      {/* 用户信息和退出按钮 */}
       <div className="flex shrink-0 items-center gap-2">
         <span className="grid h-8 w-8 place-items-center rounded-full bg-brand-500/20 text-xs font-medium text-brand-300">
-          K
+          {user?.username?.[0]?.toUpperCase() ?? 'U'}
         </span>
-        <span className="hidden text-sm text-white/70 sm:inline">kev1n</span>
+        <span className="hidden text-sm text-white/70 sm:inline">
+          {user?.username ?? '未登录'}
+        </span>
+        <button
+          type="button"
+          onClick={logout}
+          aria-label="退出登录"
+          className="ml-2 hidden rounded-lg px-2 py-1 text-xs text-white/50 transition-colors hover:bg-white/5 hover:text-white sm:inline"
+        >
+          退出
+        </button>
       </div>
     </header>
   )
