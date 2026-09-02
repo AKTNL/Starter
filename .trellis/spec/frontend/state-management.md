@@ -47,9 +47,27 @@ Only when **all** of the following are true:
 2. Passing it down would require threading props through 3+ layers.
 3. It must survive route changes.
 
-Today nothing qualifies. Auth/session state and theme preference are the
-most likely first real candidates — add a store at that point, and update
+**Auth/session state** now qualifies and uses React Context (see "Auth State" section below).
+Theme preference is the next likely candidate — add a store at that point, and update
 this file with the chosen library and patterns.
+
+---
+
+## Auth State
+
+Authentication state is managed with React Context:
+
+- **Provider**: `src/contexts/AuthContext.tsx` wraps the app in `main.tsx`.
+- **Hook**: `src/hooks/useAuth()` consumes the context with a built-in
+  guard (`if (context === undefined) throw`).
+- **Persistence**: localStorage via `src/lib/auth.ts` helpers. The provider
+  initializes from storage, so a refresh keeps the session.
+- **Mock data**: `MOCK_USERS` array in `AuthContext.tsx` simulates a user
+  database. Replace with real API calls when backend is ready.
+
+This is the first global state in the project. It was added because auth
+state satisfies all three criteria: read by many components, needs threading
+through multiple layers, and must survive route changes.
 
 ---
 

@@ -20,18 +20,23 @@ accumulates 5+ files. Do not do it pre-emptively.
 
 ```
 src/
-├── main.tsx                  Entry point. Mounts <BrowserRouter>; no providers yet
+├── main.tsx                  Entry point. Mounts <BrowserRouter> + AuthProvider
 ├── App.tsx                   Route table only — no layout or business logic
 ├── index.css                 `@import 'tailwindcss'` + @theme tokens + base layer
 ├── components/
 │   ├── layout/               App shell: AppLayout, Sidebar, Topbar
 │   ├── ui/                   App-agnostic primitives: Card, Badge, StatCard, PagePlaceholder
-│   └── dashboard/            Domain widgets: StatsGrid, RevenueChart, RecentOrders
-├── pages/                    One file per route: Dashboard, Users, Orders, Products, Settings
+│   ├── dashboard/            Domain widgets: StatsGrid, RevenueChart, RecentOrders
+│   └── auth/                 Auth components: ProtectedRoute, LogoutButton
+├── contexts/                 React Context providers (auth-context.ts, AuthContext.tsx)
+├── hooks/                    Custom hooks (useAuth.ts)
+├── pages/                    One file per route: Dashboard, Users, Orders, Products, Settings, Login, Register
 ├── data/
 │   ├── mock.ts               All mock datasets (KPI_STATS, REVENUE_SERIES, RECENT_ORDERS)
 │   └── navigation.ts         NAV_ITEMS — single source of truth for the sidebar
-├── lib/utils.ts              cn(), formatCurrency(), formatCompact()
+├── lib/
+│   ├── utils.ts              cn(), formatCurrency(), formatCompact()
+│   └── auth.ts               localStorage helpers for auth persistence
 └── types/index.ts            Shared domain types
 ```
 
@@ -44,6 +49,11 @@ src/
   or `pages/`, not here.
 - **`components/dashboard/`** — widgets combining `ui/` primitives with domain
   data; these *may* import from `data/`.
+- **`components/auth/`** — auth-related components: `ProtectedRoute`, `LogoutButton`.
+- **`contexts/`** — React Context providers. One context per file, with a
+  separate file for the context definition (`auth-context.ts`) and provider
+  implementation (`AuthContext.tsx`).
+- **`hooks/`** — custom hooks. One hook per file, named `useThing.ts`.
 - **`pages/`** — route targets. Compose widgets, own page-level copy
   (titles, descriptions). Keep thin.
 - **`data/`** — static data and configuration. No React imports.
@@ -53,9 +63,12 @@ src/
 
 | From | May import |
 | --- | --- |
-| `pages/` | `components/**`, `data/`, `lib/`, `types/` |
+| `pages/` | `components/**`, `data/`, `lib/`, `types/`, `contexts/`, `hooks/` |
 | `components/dashboard/` | `components/ui/`, `data/`, `lib/`, `types/` |
+| `components/auth/` | `contexts/`, `hooks/`, `lib/`, `types/` |
 | `components/ui/` | `lib/`, `types/` |
+| `contexts/` | `lib/`, `types/` |
+| `hooks/` | `contexts/`, `types/` |
 | `data/`, `lib/`, `types/` | nothing from the app |
 
 Never import upward (e.g. `components/ui/` importing from `pages/`).

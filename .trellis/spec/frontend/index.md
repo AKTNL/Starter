@@ -40,8 +40,8 @@ or repeats an existing pattern.
 |-------|-------------|--------|
 | [Directory Structure](./directory-structure.md) | Module organization and file layout | Filled |
 | [Component Guidelines](./component-guidelines.md) | Component patterns, props, composition | Filled |
-| [Hook Guidelines](./hook-guidelines.md) | Custom hooks, data fetching patterns | Filled (documents that none exist yet) |
-| [State Management](./state-management.md) | Local state, global state, server state | Filled (no global store by design) |
+| [Hook Guidelines](./hook-guidelines.md) | Custom hooks, data fetching patterns | Filled (documents useAuth) |
+| [State Management](./state-management.md) | Local state, global state, server state | Filled (auth uses Context) |
 | [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | Filled |
 | [Type Safety](./type-safety.md) | Type patterns, validation | Filled (no runtime validation yet) |
 
@@ -56,9 +56,9 @@ documented in detail in the linked files, but worth stating up front:
    convention, opposite of US/EU). See `component-guidelines.md`.
 2. **Linter is oxlint, not ESLint** — `npm run lint` runs `oxlint`. Do not add
    ESLint config expecting it to run. See `quality-guidelines.md`.
-3. **No global state store** — state is local and colocated on purpose. Do not
-   introduce Redux/Zustand/Context without meeting the criteria in
-   `state-management.md`.
+3. **Global state is minimal** — only auth state uses Context (because it
+   meets all three criteria in `state-management.md`). Do not introduce
+   Redux/Zustand/Context without meeting those criteria first.
 
 ---
 
@@ -69,7 +69,6 @@ team before relying on them:
 
 - No test framework, no tests
 - No runtime validation at API boundaries (no backend exists yet)
-- No auth / route guards
 - Dark theme only; no light-mode switch
 
 ---

@@ -6,14 +6,15 @@
 
 ## Overview
 
-**There are no custom hooks yet.** This is accurate as of the initial
-dashboard build — every component uses built-in hooks only:
+**One custom hook exists now:** `useAuth` in `src/hooks/useAuth.ts`.
+It consumes the auth context and throws if used outside the provider.
 
 | Hook | Used in | Purpose |
 | --- | --- | --- |
 | `useState` | `AppLayout` | `collapsed`, `mobileOpen` |
 | `useState` | `RevenueChart` | `range` (`'7d' \| '30d'`) |
 | `lazy` / `Suspense` | `Dashboard` | Code-split the recharts bundle |
+| `useAuth` | `Topbar`, `ProtectedRoute`, etc. | Consume auth context |
 
 Do not invent a custom hook for a single `useState`. Extract only when the
 logic is genuinely reused or when a component mixes unrelated concerns.
@@ -33,10 +34,16 @@ When a custom hook becomes justified, follow this shape:
   Do not mix.
 
 ```ts
-// src/hooks/useDisclosure.ts — example shape, not yet in the codebase
-export function useDisclosure(initial = false) {
-  const [open, setOpen] = useState(initial)
-  return { open, open: () => setOpen(true), /* ... */ }
+// src/hooks/useAuth.ts — actual implementation
+import { useContext } from 'react'
+import { AuthContext } from '@/contexts/auth-context'
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }
 ```
 
