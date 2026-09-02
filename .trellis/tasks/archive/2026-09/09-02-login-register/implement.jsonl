@@ -1,0 +1,9 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Module organization and file layout guidelines for frontend code"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Component patterns, props, composition guidelines"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Type patterns and validation guidelines"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "State management patterns and guidelines"}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Custom hooks and data fetching patterns"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Code standards and forbidden patterns"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Cross-layer thinking guide for features spanning multiple layers"}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "Code reuse thinking guide for identifying patterns and reducing duplication"}
