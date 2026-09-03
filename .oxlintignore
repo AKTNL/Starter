@@ -1,0 +1,5 @@
+# Server is a standalone TS project with its own typecheck (server/package.json).
+# Keep the root `npm run lint` scoped to the frontend so it stays green.
+server/
+dist/
+coverage/

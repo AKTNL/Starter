@@ -6,12 +6,13 @@
 
 ## Overview
 
-Quality bar is enforced by three commands, all of which must pass before work
+Quality bar is enforced by four commands, all of which must pass before work
 is considered done:
 
 ```bash
 npm run build   # tsc -b (type check) && vite build
 npm run lint    # oxlint
+npm test        # vitest run
 ```
 
 **Linter is oxlint, not ESLint.** The Vite template ships `oxlint` with
@@ -65,21 +66,34 @@ install. Run `npm install` before diagnosing anything else.
 
 ## Testing Requirements
 
-**No test framework is installed and no tests exist.** This was an explicit
-out-of-scope decision for the initial shell build.
+测试运行器为 **Vitest**（`npm test`）。与 ESLint 无关 —— `oxlint` 仍管 lint。
 
-When tests are added, in priority order:
+```bash
+npm test          # vitest run（一次跑完，CI 友好）
+npm run coverage  # 带 v8 覆盖率报告
+```
 
-1. `lib/utils.ts` — pure functions (`cn`, `formatCurrency`, `formatCompact`);
-   cheapest meaningful coverage.
-2. `components/ui/*` — presentational primitives, assert rendered output for
-   each `OrderStatus` / `TrendDirection`.
-3. `components/dashboard/RevenueChart` — assert the 7d/30d toggle swaps the
-   dataset (`REVENUE_SERIES['7d']` length 7 vs `['30d']` length 30).
-4. Routing — assert each nav item renders its page and that an unknown path
-   redirects to `/`.
+约定：
 
-Add them at that point and update this section with the chosen runner.
+- 测试文件与源码同目录，命名 `*.test.ts` / `*.test.tsx`
+- Vitest 配置并入 `vite.config.ts` 的 `test` 字段（**不**新建 `vitest.config.ts`，否则 alias
+  失同步）；CR 级别的 alias 会被覆盖丢失
+- `globals: true` + `src/test/setup.ts`，否则 `@testing-library/react` 的自动 cleanup 不生效
+- HTTP 请求用 **MSW** mock（`src/mocks/handlers.ts` + `src/mocks/server.ts`），后端上线后
+  handler 可平滑迁移到契约测试
+- jsdom 的 `url` 设为 `http://localhost:3000`，否则 axios 相对 `/api` 在测试里拼不出绝对 URL，
+  MSW 无法匹配
+- `localStorage` 在 `setup.ts` 的 `beforeEach` 清空，保证用例隔离
+- 覆盖边界/错误路径优先
+
+已覆盖（P0）：
+
+1. `src/lib/auth.ts` — token/user 存取与清理、`clearStoredAuth` 全清
+2. `src/api/auth.ts` — 四个接口 + 请求拦截器带 `Authorization`（直接验证 token key 不一致修复）
+3. `src/contexts/AuthContext.tsx` — 无 token 时稳定到 `user === null`
+4. `src/components/auth/ProtectedRoute.tsx` — 未登录跳 `/login`、已登录放行
+
+后续新增测试请沿用以上结构。
 
 ---
 
