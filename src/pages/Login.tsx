@@ -104,7 +104,7 @@ export function Login() {
             className="w-full"
             disabled={isLoading}
           >
-            {isLoading ? '登录中...' : '登录}
+            {isLoading ? '登录中...' : '登录'}
           </Button>
         </form>
 

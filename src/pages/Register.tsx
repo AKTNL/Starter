@@ -124,7 +124,7 @@ export function Register() {
             className="w-full"
             disabled={isLoading}
           >
-            {isLoading ? '注册中...' : '立即注册}
+            {isLoading ? '注册中...' : '立即注册'}
           </Button>
         </form>
 

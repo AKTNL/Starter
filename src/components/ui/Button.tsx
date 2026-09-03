@@ -48,5 +48,5 @@ export const Button = forwardRef<
       {...props}
     />
   )
-}
+})
 Button.displayName = 'Button'

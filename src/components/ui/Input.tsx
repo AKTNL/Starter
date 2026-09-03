@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
   size?: 'default' | 'sm' | 'lg'
 }
@@ -46,5 +46,5 @@ export const Input = forwardRef<
       {...props}
     />
   )
-}
+})
 Input.displayName = 'Input'

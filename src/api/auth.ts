@@ -1,5 +1,5 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 // 创建axios实例
 const api = axios.create({
@@ -99,7 +99,7 @@ export const userAPI = {
 export const decodeToken = (token: string) => {
   try {
     return jwtDecode(token);
-  } catch (error) {
+  } catch {
     return null;
   }
 };

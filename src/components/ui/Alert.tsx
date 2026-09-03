@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-interface AlertProps extends React.DivHTMLAttributes<HTMLDivElement> {
+interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'destructive' | 'success' | 'warning'
 }
 

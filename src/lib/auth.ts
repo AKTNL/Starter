@@ -1,5 +1,4 @@
 import type { User } from '@/types'
-import { getAccessToken } from '@/api/auth'
 
 const STORAGE_KEY = 'starter-auth-user'
 const REMEMBER_KEY = 'starter-remember-email'

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { User } from '@/types'
 import { getStoredUser, setStoredUser, clearStoredAuth, getStoredAccessToken, setStoredAccessToken, getStoredRefreshToken, setStoredRefreshToken } from '@/lib/auth'
 import { AuthContext } from './auth-context'
-import { authAPI, decodeToken, isTokenExpired } from '@/api/auth'
+import { authAPI, isTokenExpired } from '@/api/auth'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => getStoredUser())
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               
               const userData = await authAPI.getCurrentUser()
               setUser(userData)
-            } catch (refreshError) {
+            } catch {
               // 刷新失败，清除所有认证数据
               clearStoredAuth()
               setUser(null)
