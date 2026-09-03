@@ -86,6 +86,74 @@ formatter={(value: number) => [`¥${value.toLocaleString('zh-CN')}`, '营收']}
 
 ---
 
+## Typing `forwardRef` Primitives
+
+`components/ui/*` primitives wrap native elements with `forwardRef`. Three
+mistakes recur here — all of them fail the build, not just lint.
+
+### 1. Close the `forwardRef(...)` call
+
+The generic call, the arrow function, and the `return (` paren each need their
+own closer. The last line before `displayName` is `})`, **not** `}`:
+
+```tsx
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'default', ...props }, ref) => {
+    return (
+      <Comp ref={ref} className={/* ... */} {...props} />
+    )
+  },
+)          // ← arrow body `}` then forwardRef `)`; easy to drop one
+Button.displayName = 'Button'
+```
+
+Symptom when wrong: `TS1005: ',' expected` pointing at the `displayName` line
+far below the real mistake.
+
+### 2. `React.DivHTMLAttributes` does not exist
+
+There is no `DivHTMLAttributes`. Use `HTMLAttributes<HTMLDivElement>`:
+
+```tsx
+// Good
+interface AlertProps extends React.HTMLAttributes<HTMLDivElement> { /* ... */ }
+
+// Bad — TS2724, and className/children then vanish from the type
+interface AlertProps extends React.DivHTMLAttributes<HTMLDivElement> { /* ... */ }
+```
+
+### 3. `Omit` native props you redefine
+
+Declaring `size?: 'default' | 'sm' | 'lg'` on an input collides with the native
+`size?: number` and triggers `TS2430` on the interface itself. Omit the native
+prop before extending:
+
+```tsx
+// Good
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  variant?: 'default' | 'destructive'
+  size?: 'default' | 'sm' | 'lg'
+}
+
+// Bad — TS2430: interface incorrectly extends InputHTMLAttributes
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  size?: 'default' | 'sm' | 'lg'
+}
+```
+
+Same treatment applies to `color`, `width`, `height`, and `type` whenever a
+primitive redefines them with a different domain.
+
+### 4. `jwt-decode` v4 has no default export
+
+`import jwtDecode from 'jwt-decode'` fails with `TS2613`. It is a named export:
+
+```ts
+import { jwtDecode } from 'jwt-decode'
+```
+
+---
+
 ## Forbidden Patterns
 
 - **`any`** anywhere. Use `unknown` plus a type guard when a value is

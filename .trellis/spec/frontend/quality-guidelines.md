@@ -24,6 +24,14 @@ warn (`allowConstantExport: true`).
 
 ---
 
+## After Merging a Branch
+
+`git merge` / merging a PR that touched `package.json` updates the manifest but
+**not** `node_modules`. Building straight away produces `TS2307: Cannot find
+module 'x'` plus a cascade of `TS7006: Parameter implicitly has an 'any' type`
+on that library's callbacks — which reads like broken code but is just a stale
+install. Run `npm install` before diagnosing anything else.
+
 ## Forbidden Patterns
 
 - **`any`.** Use `unknown` + a type guard. See `type-safety.md`.
