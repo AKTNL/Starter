@@ -1,79 +1,115 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { User } from '@/types'
-import { getStoredUser, setStoredUser } from '@/lib/auth'
+import { getStoredUser, setStoredUser, clearStoredAuth, getStoredAccessToken, setStoredAccessToken, getStoredRefreshToken, setStoredRefreshToken } from '@/lib/auth'
 import { AuthContext } from './auth-context'
-
-// 模拟用户数据库
-const MOCK_USERS: Array<{ user: User; password: string }> = [
-  {
-    user: { id: '1', username: 'admin', email: 'admin@example.com', role: 'admin' },
-    password: 'admin123',
-  },
-  {
-    user: { id: '2', username: 'user1', email: 'user1@example.com', role: 'user' },
-    password: 'user123',
-  },
-]
+import { authAPI, decodeToken, isTokenExpired } from '@/api/auth'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => getStoredUser())
   const [isLoading, setIsLoading] = useState(true)
 
-  // 模拟初始加载
+  // 初始加载时检查token状态
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 100)
-    return () => clearTimeout(timer)
+    const checkAuthStatus = async () => {
+      setIsLoading(true)
+      try {
+        const accessToken = getStoredAccessToken()
+        if (accessToken && !isTokenExpired(accessToken)) {
+          // Token有效，获取用户信息
+          const userData = await authAPI.getCurrentUser()
+          setUser(userData)
+        } else {
+          // Token无效或过期，尝试刷新
+          const refreshToken = getStoredRefreshToken()
+          if (refreshToken) {
+            try {
+              const tokenData = await authAPI.refreshToken(refreshToken)
+              setStoredAccessToken(tokenData.access_token)
+              setStoredRefreshToken(tokenData.refresh_token)
+              
+              const userData = await authAPI.getCurrentUser()
+              setUser(userData)
+            } catch (refreshError) {
+              // 刷新失败，清除所有认证数据
+              clearStoredAuth()
+              setUser(null)
+            }
+          } else {
+            // 没有刷新令牌，清除认证数据
+            clearStoredAuth()
+            setUser(null)
+          }
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error)
+        clearStoredAuth()
+        setUser(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuthStatus()
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
-    // 模拟网络延迟
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    const found = MOCK_USERS.find(
-      (u) => (u.user.email === email || u.user.username === email) && u.password === password,
-    )
-
-    if (found) {
-      setUser(found.user)
-      setStoredUser(found.user)
+    setIsLoading(true)
+    try {
+      const response = await authAPI.login(email, password)
+      
+      // 存储token
+      setStoredAccessToken(response.access_token)
+      setStoredRefreshToken(response.refresh_token)
+      
+      // 存储用户信息
+      setUser(response.user)
+      setStoredUser(response.user)
+      
       return { success: true }
+    } catch (error: any) {
+      console.error('Login failed:', error)
+      return { 
+        success: false, 
+        error: error.response?.data?.message || '登录失败，请检查邮箱和密码' 
+      }
+    } finally {
+      setIsLoading(false)
     }
-    return { success: false, error: '邮箱/用户名或密码错误' }
   }, [])
 
   const register = useCallback(async (username: string, email: string, password: string) => {
-    // 模拟网络延迟
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    // 检查用户名是否已存在
-    if (MOCK_USERS.some((u) => u.user.username === username)) {
-      return { success: false, error: '用户名已存在' }
+    setIsLoading(true)
+    try {
+      const response = await authAPI.register({ email, password, name: username })
+      
+      // 存储token
+      setStoredAccessToken(response.access_token)
+      setStoredRefreshToken(response.refresh_token)
+      
+      // 存储用户信息
+      setUser(response.user)
+      setStoredUser(response.user)
+      
+      return { success: true }
+    } catch (error: any) {
+      console.error('Registration failed:', error)
+      return { 
+        success: false, 
+        error: error.response?.data?.message || '注册失败' 
+      }
+    } finally {
+      setIsLoading(false)
     }
-
-    // 检查邮箱是否已存在
-    if (MOCK_USERS.some((u) => u.user.email === email)) {
-      return { success: false, error: '邮箱已被注册' }
-    }
-
-    // 创建新用户
-    const newUser: User = {
-      id: String(MOCK_USERS.length + 1),
-      username,
-      email,
-      role: 'user',
-    }
-    MOCK_USERS.push({ user: newUser, password })
-
-    // 注册成功后自动登录
-    setUser(newUser)
-    setStoredUser(newUser)
-    return { success: true }
   }, [])
 
   const logout = useCallback(() => {
+    // 调用登出API（如果需要的话）
+    // authAPI.logout()
+    
+    // 清除所有存储的认证数据
+    clearStoredAuth()
     setUser(null)
-    setStoredUser(null)
   }, [])
 
   return (
