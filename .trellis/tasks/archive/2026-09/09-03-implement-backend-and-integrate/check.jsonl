@@ -1,0 +1,2 @@
+{"file": ".trellis/tasks/09-03-add-tests-and-backend/research/backend-stack.md", "reason": "Backend contract + pitfall reference for verifying the 4 endpoints match the frontend exactly (snake_case, exp claim, {message} errors)"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Quality bar: 4-command lint/typecheck/build/test gate — the backend integration must not regress frontend checks"}
