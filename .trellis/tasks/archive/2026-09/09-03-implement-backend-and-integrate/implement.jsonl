@@ -1,0 +1,2 @@
+{"file": ".trellis/tasks/09-03-add-tests-and-backend/research/backend-stack.md", "reason": "Backend stack research (49KB): exact pinned versions, the 4-endpoint contract, §1.2 five historical pitfalls, §4.6 .gitignore rules — primary implementation reference"}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend contract reference: snake_case access_token response vs camelCase refreshToken body, User.id is string (uuid/text PK), name→username mapping, Known Gaps context"}

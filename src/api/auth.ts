@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { getStoredAccessToken, clearStoredAuth } from '@/lib/auth';
 
 // 创建axios实例
 const api = axios.create({
@@ -12,7 +13,7 @@ const api = axios.create({
 // 添加请求拦截器，自动添加token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = getStoredAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -62,9 +63,7 @@ export const authAPI = {
 
   // 登出（客户端操作）
   logout: () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
+    clearStoredAuth();
   },
 };
 
@@ -115,7 +114,7 @@ export const isTokenExpired = (token: string): boolean => {
 
 // 获取有效的access token
 export const getAccessToken = (): string | null => {
-  const token = localStorage.getItem('access_token');
+  const token = getStoredAccessToken();
   if (!token) return null;
 
   if (isTokenExpired(token)) {

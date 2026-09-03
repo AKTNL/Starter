@@ -1,0 +1,8 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/frontend/index.md", "reason": "frontend 开发总纲与 Pre-Development Checklist"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "新测试文件放哪、import 方向"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "verbatimModuleSyntax/import type 约束，写 vite.config test 字段时容易踩"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "lint/test/build 质量门禁"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件/断言写法参考"}
+{"file": ".trellis/tasks/09-03-add-tests-and-backend/research/test-stack.md", "reason": "测试栈选型与 P0 用例设计"}
+{"file": ".trellis/tasks/09-03-add-tests-and-backend/prd.md", "reason": "父任务 PRD（含接口契约与隐私约束）"}

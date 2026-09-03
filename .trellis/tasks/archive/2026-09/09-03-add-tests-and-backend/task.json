@@ -1,0 +1,29 @@
+{
+  "id": "add-tests-and-backend",
+  "name": "add-tests-and-backend",
+  "title": "补齐测试覆盖与后端联调",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "EIR",
+  "assignee": "EIR",
+  "createdAt": "2026-09-03",
+  "completedAt": "2026-09-03",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "09-03-fix-auth-key-and-add-tests",
+    "09-03-implement-backend-and-integrate"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}

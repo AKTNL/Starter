@@ -67,7 +67,7 @@ documented in detail in the linked files, but worth stating up front:
 Deliberate out-of-scope decisions from the initial build — confirm with the
 team before relying on them:
 
-- No test framework, no tests
+- Test framework added: Vitest + jsdom + RTL + MSW (P0 auth-chain coverage done)
 - No runtime validation at API boundaries (no backend exists yet)
 - Dark theme only; no light-mode switch
 

@@ -1,0 +1,29 @@
+{
+  "name": "starter-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "seed": "tsx scripts/seed.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "better-sqlite3": "^13.0.3",
+    "drizzle-orm": "^0.45.2",
+    "argon2": "^0.45.1",
+    "jose": "^6.2.10",
+    "zod": "^4.5.4",
+    "dotenv": "^17.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.0",
+    "drizzle-kit": "^0.31.10"
+  }
+}

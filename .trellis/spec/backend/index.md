@@ -14,11 +14,15 @@ This directory contains guidelines for backend development. Fill in each file wi
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Database Guidelines](./database-guidelines.md) | ORM patterns, queries, migrations | To fill |
-| [Error Handling](./error-handling.md) | Error types, handling strategies | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels | To fill |
+| [Directory Structure](./directory-structure.md) | `server/` layout, layered modules | Filled |
+| [Database Guidelines](./database-guidelines.md) | better-sqlite3 + Drizzle, WAL, `DB_PATH`, gitignore | Filled |
+| [Error Handling](./error-handling.md) | `{ message }` envelope, status-code map | Filled |
+| [Quality Guidelines](./quality-guidelines.md) | **Contract-alignment rules (do NOT "fix" the API)** | Filled |
+| [Logging Guidelines](./logging-guidelines.md) | Fail-fast on secrets, never log tokens | Filled |
+
+## Backend Auth Contract (source of truth)
+
+The 4 auth endpoints and their exact request/response shapes are the **contract** between `server/src/routes/auth.ts` and the frontend (`src/api/auth.ts`). They are deliberately inconsistent by historical design — read [Quality Guidelines](./quality-guidelines.md#forbidden-patterns) before changing anything. Full shape: see `README.md` "鉴权接口" and the task PRD `09-03-implement-backend-and-integrate/prd.md`.
 
 ---
 
