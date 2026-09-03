@@ -39,3 +39,38 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: 修复合并 PR #1 后的构建失败
+
+**Date**: 2026-09-03
+**Task**: 修复合并 PR #1 后的构建失败
+**Branch**: `main`
+
+### Summary
+
+修复 PR #1 引入的 4 处语法错误、3 处类型错误，补装缺失依赖 axios/jwt-decode，清理 4 处未使用变量；沉淀 forwardRef 类型规范。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `95a74da` | (see git log) |
+| `b87919d` | (see git log) |
+| `06c127d` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
